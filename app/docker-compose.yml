@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: reading-notes-app
+    ports:
+      - "5005:5005"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=main.py
+    volumes:
+      - ./flask:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
